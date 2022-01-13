@@ -76,26 +76,3 @@ main()
     #     self.balls.append(ball)
 
 
-def main():
-    screen.fill(WHITE)
-    done = False
-    clock = pygame.time.Clock()
-    while not done: 
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-
-            if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
-                Ball.addBall(balls, pos[0], pos[1])
-
-        screen.fill(WHITE)
-        for i in range(len(balls)):
-            Ball.drawBall(balls[i])
-            Ball.fall(balls[i])
-    
-    clock.tick(30)
-    pygame.quit()
-
-main()
