@@ -1,36 +1,79 @@
-import pygame
+import arcade
 import random
 
-pygame.init()
-
-width = 500
-height = 400
-screen = pygame.display.set_mode((width, height))
+width = 600
+height = 600
 balls = []
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
 
 class Ball:
-    def __init__(self, x, y, r, colour):
-        self.x = x
-        self.y = y
-        self.r = r
-        self.colour = colour
-        self.dx = random.randint(10, 20) / 10
-        self.dy = random.randint(10, 20) / 10
-        self.gravity = -0.05
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.dx = 0
+        self.dy = 0
+        self.size = 0
+        self.colour = None
 
-    def drawBall(self):
-        pygame.draw.circle(screen, self.colour, (self.x, self.y), self.r)
-        pygame.display.flip()
+    def makeBall():
+        ball = Ball()
+        ball.size = random.randint(10, 20)
 
-    def addBall(balls, x, y):
-        balls.append(Ball(x, y, 7, BLUE))
+        ball.x = random.randint(ball.size, width - ball.size)
+        ball.y = random.randint(ball.size, height - ball.size)
 
-    def fall(self):
-        # self.dy += self.gravity
-        self.y = (self.y + self.dy)
-        self.x = (self.x + self.dx)
+        ball.dx = random.randint(-2, 3)
+        ball.dy = random.randint(-2, 3)
+
+        ball.colour = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+        return ball
+
+    def draw(self):
+        for ball in balls: 
+            arcade.draw_circle_filled(ball.x, ball.y, ball.size, ball.colour)
+
+    def moveBall(self):
+        for ball in balls:
+            ball.x += ball.dx
+            ball.y += ball.dy
+
+            if ball.x < ball.size:
+                ball.dx *= -1
+            if ball.y < ball.size:
+                ball.dy *= -1
+            if ball.x > width - ball.size:
+                ball.dx *= -1
+            if ball.y > height - ball.size:
+                ball.dy *= - 1
+
+def main():
+    # width, height, title, resizable, antialiasing
+    arcade.open_window(width, height, "Bouncing Balls", False, True)
+    # start drawing (similar to pygame.init())
+    arcade.start_render()
+
+    # create/draw/move balls
+    for i in range(0, 6):
+
+        ball = Ball.makeBall()
+        balls.append(ball)
+        Ball.draw(ball)
+    
+    while True: 
+        Ball.moveBall(ball)
+
+    # stop drawing (without this the drawing flashes)
+    arcade.finish_render()
+
+    arcade.run()
+
+
+main()
+
+
+    # def on_mouse_press(self):
+    #     ball = Ball.makeBall()
+    #     self.balls.append(ball)
 
 
 def main():
