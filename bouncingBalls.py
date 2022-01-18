@@ -1,3 +1,4 @@
+
 import arcade
 import random
 
@@ -13,27 +14,27 @@ class Ball:
         self.dx = 0
         self.dy = 0
 
-def createBall():
-    ball = Ball()
+    def createBall(x, y):
+        ball = Ball()
 
-    ball.colour = ((random.randint(0, 255)), (random.randint(0, 255)), random.randint(0, 255))
+        ball.colour = ((random.randint(0, 255)), (random.randint(0, 255)), random.randint(0, 255))
 
-    ball.size = random.randint(10, 20)
+        ball.size = random.randint(10, 20)
 
-    ball.x = random.randint((ball.size), (width - ball.size))
-    ball.y = random.randint((ball.size), (height - ball.size))
+        ball.x = x
+        ball.y = y
 
-    ball.dx = random.randint(-5, 6)
-    ball.dy = random.randint(-5, 6)
+        ball.dx = random.randint(-5, 6)
+        ball.dy = random.randint(-5, 6)
 
-    return ball
+        return ball
 
 class ballGame(arcade.Window):
 
     def __init__(self):
         super().__init__(width, height, "Bouncing Balls!!")
         self.balls = []
-        ball = createBall()
+        ball = Ball.createBall(random.randint((10), (width - 10)), random.randint((10), (height - 10)))
         self.balls.append(ball)
 
     # special handler function for drawing (doesn't work if it's called "drawBalls" or something like that)
@@ -70,18 +71,25 @@ class ballGame(arcade.Window):
 
      # special handler for mouse clicks (button is button that is pressed, modifiers are all keys like shift/ctrl pressed )
     def on_mouse_press(self, x, y, button, modifiers):
-        ball = createBall()
+        ball = Ball.createBall(x, y)
         self.balls.append(ball)
 
     # almost the same as on_mouse_press but with keys instead of buttons
     def on_key_press(self, key, modifiers):
         if key == arcade.key.DOWN:
             self.balls.pop()
+        if key == arcade.key.UP:
+            ball = Ball.createBall(random.randint((10), (width - 10)), random.randint((10), (height - 10)))
+            self.balls.append(ball)
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        for ball in self.balls:
+            ball.x = x
+            ball.y = y 
 
 def main():
     ballGame()
     arcade.run()
 
 main()
-
 
